@@ -1,5 +1,5 @@
 import axios from "axios";
-import { replace, push } from "connected-react-router";
+import { replace } from "connected-react-router";
 import { routes } from "../containers/Router/";
 
 const baseUrl = "https://us-central1-future-apis.cloudfunctions.net/fourEddit"
