@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { getPosts, createPost } from "../../actions/posts";
+import { getPosts, createPost, vote } from "../../actions/posts";
 
 const WrapperPost = styled.div`
   border: 1px solid black;
@@ -29,6 +29,7 @@ class Posts extends Component {
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
+
     this.setState({
       newPost: { ...this.state.newPost, [name]: value },
     });
@@ -38,7 +39,25 @@ class Posts extends Component {
     e.preventDefault();
 
     this.props.createPost(this.state.newPost);
-    console.log(this.state.newPost);
+    this.setState({
+      newPost: { text: "", title: "" },
+    });
+  };
+
+  handleLikeButton = (id, likeDirection) => {
+    if (likeDirection === 0 || likeDirection === -1) {
+      this.props.vote(1, id);
+    } else {
+      this.props.vote(0, id);
+    }
+  };
+
+  handleDislikeButton = (id, likeDirection) => {
+    if (likeDirection === 0 || likeDirection === 1) {
+      this.props.vote(-1, id);
+    } else {
+      this.props.vote(0, id);
+    }
   };
 
   render() {
@@ -55,7 +74,7 @@ class Posts extends Component {
             onChange={this.handleInputChange}
           />
 
-          <br/>
+          <br />
 
           <label htmlFor="text">Post</label>
           <textarea
@@ -78,7 +97,24 @@ class Posts extends Component {
                 <p>Título: {posts.title}</p>
                 <p>Post: {posts.text}</p>
                 <div>
+                  <button
+                    onClick={() =>
+                      this.handleLikeButton(posts.id, posts.userVoteDirection)
+                    }
+                  >
+                    Like
+                  </button>
                   <p>Likes: {posts.votesCount}</p>
+                  <button
+                    onClick={() =>
+                      this.handleDislikeButton(
+                        posts.id,
+                        posts.userVoteDirection
+                      )
+                    }
+                  >
+                    Dislike
+                  </button>
                   <p>{posts.userVoteDirection}</p>
                   <p>Comentários: {posts.commentsCount}</p>
                 </div>
@@ -97,6 +133,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getPosts: () => dispatch(getPosts()),
   createPost: (post) => dispatch(createPost(post)),
+  vote: (direction, id) => dispatch(vote(direction, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

@@ -45,3 +45,24 @@ export const createPost = (post) => async (dispatch, getState) => {
         console.error(error)
     }
 }
+
+export const vote = (direction, id) => async (dispatch, getState) => {
+    const body = {
+        direction
+    }
+    try {
+        const response = await axios.put(
+            `${baseUrl}/posts/${id}/vote`, body, {
+                headers: {
+                    auth: token
+                }
+            }
+        )
+        console.log("Direction na action: ", direction)
+        dispatch(getPosts())
+    } catch (error) {
+        console.error(error)
+        console.log("Direction: ", direction)
+        console.log("ID: ", id)
+    }
+}
