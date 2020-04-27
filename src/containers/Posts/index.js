@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { getPosts, createPost, vote } from "../../actions/posts";
+import { getPosts, createPost, vote, getPostDetails } from "../../actions/posts";
 
 const WrapperPost = styled.div`
   border: 1px solid black;
@@ -115,8 +115,7 @@ class Posts extends Component {
                   >
                     Dislike
                   </button>
-                  <p>{posts.userVoteDirection}</p>
-                  <p>Comentários: {posts.commentsCount}</p>
+                  <button onClick={()=> this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</button>
                 </div>
               </WrapperPost>
             );
@@ -134,6 +133,7 @@ const mapDispatchToProps = (dispatch) => ({
   getPosts: () => dispatch(getPosts()),
   createPost: (post) => dispatch(createPost(post)),
   vote: (direction, id) => dispatch(vote(direction, id)),
+  getPostDetails: (postId) => dispatch(getPostDetails(postId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

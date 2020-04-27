@@ -14,6 +14,15 @@ export const setAllPosts = (post) => {
     }
 }
 
+export const setPostDetails = (comment) => {
+    return {
+        type: "SET_POST_DETAILS",
+        payload: {
+            comment
+        }
+    }
+}
+
 export const getPosts = () => async (dispatch, getState) => {
     try {
         const response = await axios.get(
@@ -39,7 +48,6 @@ export const createPost = (post) => async (dispatch, getState) => {
                 }
             }
         )
-        console.log("FOI")
         dispatch(getPosts())
     } catch (error) {
         console.error(error)
@@ -58,11 +66,24 @@ export const vote = (direction, id) => async (dispatch, getState) => {
                 }
             }
         )
-        console.log("Direction na action: ", direction)
         dispatch(getPosts())
     } catch (error) {
         console.error(error)
-        console.log("Direction: ", direction)
-        console.log("ID: ", id)
+    }
+}
+
+export const getPostDetails = (postId) => async (dispatch, getState) => {
+    try {
+        const response = await axios.get(
+            `${baseUrl}/posts/${postId}`, {
+                headers: {
+                    auth: token
+                }
+            }
+        )
+        dispatch(setPostDetails(response.data.post.comments))
+        dispatch(push(routes.details))
+    } catch (error) {
+        console.log(error)
     }
 }

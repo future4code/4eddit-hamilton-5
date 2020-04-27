@@ -25,7 +25,7 @@ const signupForm = [
     name: "password",
     type: "password",
     label: "Senha ",
-    pattern: "[A-Za-z çÇ]{6,}",
+    pattern: "[A-Za-zçÇ]{6,}",
     title: "Mínimo 6 caracteres",
   },
 ];
