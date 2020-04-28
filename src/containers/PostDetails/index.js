@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import routes from "../Router"
 import { replace } from "connected-react-router"
 import styled from "styled-components";
-import { getPostDetails, createComment } from "../../actions/posts"
+import { getPostDetails, createComment, voteComment } from "../../actions/posts"
 
 const WrapperComment = styled.div`
   border: 1px solid black;
@@ -33,8 +33,27 @@ class PostDetails extends Component {
 
   submitComment = (e) => {
     e.preventDefault()
-    this.props.createComment(this.state.comment)
+    const postId = this.props.match.params.id
+    this.props.createComment(this.state.comment, postId)
   }
+
+  handleLikeButton = (commentId, likeDirection) => {
+    const postId = this.props.match.params.id
+    if (likeDirection === 0 || likeDirection === -1) {
+      this.props.voteComment(1, commentId, postId);
+    } else {
+      this.props.voteComment(0, commentId, postId);
+    }
+  };
+
+  handleDislikeButton = (commentId, likeDirection) => {
+    const postId = this.props.match.params.id
+    if (likeDirection === 0 || likeDirection === 1) {
+      this.props.voteComment(-1, commentId, postId);
+    } else {
+      this.props.voteComment(0, commentId, postId);
+    }
+  };
 
   render() {
     return (
@@ -53,9 +72,9 @@ class PostDetails extends Component {
               <p>Comentário: {comment.text} </p>
                 <div>
                   <p>DIRECTION {comment.userVoteDirection} </p>
-                  <p>{comment.votesCount}</p>
-                  <button>Like</button>
-                  <button>Dislike</button>
+                  <p> Likes {comment.votesCount}</p>
+                  <button onClick={() => this.handleLikeButton(comment.id, comment.userVoteDirection)}>Like</button>
+                  <button onClick={() => this.handleDislikeButton(comment.id, comment.userVoteDirection)} > Dislike</button>
                 </div>
             </WrapperComment>
           )
@@ -71,9 +90,10 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  createComment: (text) => dispatch(createComment(text)),
+  createComment: (text, postId) => dispatch(createComment(text, postId)),
   getPostDetails: (postId) => dispatch(getPostDetails(postId)),
-  goToPosts: () => dispatch(replace(routes.posts))
+  goToPosts: () => dispatch(replace(routes.posts)),
+  voteComment:(direction, commentId, postId) => dispatch(voteComment(direction, commentId, postId))
 })
 
 

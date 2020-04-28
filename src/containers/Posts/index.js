@@ -1,19 +1,38 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
 import { getPosts, createPost, vote, getPostDetails } from "../../actions/posts";
 
-const WrapperPost = styled.div`
-  border: 1px solid black;
-  text-align: center;
-  width: 400px;
-  margin-bottom: 10px;
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+
+const MainWrapper = styled.div`
+  padding-top: 30px;
+  background-color: #D9D9D9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const WrapperCreatePost = styled.div`
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
 `;
 
-const CreatePost = styled.div`
-  border: 1px solid black;
-  width: 400px;
+const WrapperPost = styled.div`
+  text-align: center;
+  width: 45%;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 `;
+
+const InputCreatePost = styled.input` 
+	border-radius: 5px;
+	height: 30px;
+`
 
 class Posts extends Component {
   state = {
@@ -62,11 +81,11 @@ class Posts extends Component {
 
   render() {
     return (
-      <div>
-        <CreatePost>
+      <MainWrapper>
+         <h2>Criar Post</h2>
+        <WrapperCreatePost>
           <label htmlFor="title">Título</label>
-
-          <input
+          <InputCreatePost
             required
             type="text"
             name="title"
@@ -86,9 +105,9 @@ class Posts extends Component {
             onChange={this.handleInputChange}
           />
 
-          <button onClick={this.handleCreatePost}>Enviar</button>
-        </CreatePost>
-
+          <Button color="primary" variant="contained" type="submit" onClick={this.handleCreatePost}>Enviar</Button>
+        </WrapperCreatePost>
+        <h2>Posts populares:</h2>
         {this.props.posts &&
           this.props.posts.map((posts) => {
             return (
@@ -115,12 +134,12 @@ class Posts extends Component {
                   >
                     Dislike
                   </button>
-                  <button onClick={()=> this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</button>
+                  <Button color="secondary" variant="contained" type="submit" onClick={()=> this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</Button>
                 </div>
               </WrapperPost>
             );
           })}
-      </div>
+      </MainWrapper>
     );
   }
 }
