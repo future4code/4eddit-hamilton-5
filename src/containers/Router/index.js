@@ -10,7 +10,7 @@ export const routes = {
   root: "/",
   signup: "/signup",
   posts: "/posts",
-  details: "/post/details"
+  details: "/post/details/:id"
 };
 
 function Router(props) {

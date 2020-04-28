@@ -26,7 +26,7 @@ export const setPostDetails = (comment) => {
 export const getPosts = () => async (dispatch, getState) => {
     try {
         const response = await axios.get(
-            `${baseUrl}/posts`, 
+            `${baseUrl}/posts`,
             {
                 headers: {
                     auth: token
@@ -43,10 +43,10 @@ export const createPost = (post) => async (dispatch, getState) => {
     try {
         const response = await axios.post(
             `${baseUrl}/posts`, post, {
-                headers: {
-                    auth: token
-                }
+            headers: {
+                auth: token
             }
+        }
         )
         dispatch(getPosts())
     } catch (error) {
@@ -61,10 +61,10 @@ export const vote = (direction, id) => async (dispatch, getState) => {
     try {
         const response = await axios.put(
             `${baseUrl}/posts/${id}/vote`, body, {
-                headers: {
-                    auth: token
-                }
+            headers: {
+                auth: token
             }
+        }
         )
         dispatch(getPosts())
     } catch (error) {
@@ -76,13 +76,52 @@ export const getPostDetails = (postId) => async (dispatch, getState) => {
     try {
         const response = await axios.get(
             `${baseUrl}/posts/${postId}`, {
-                headers: {
-                    auth: token
-                }
+            headers: {
+                auth: token
             }
+        }
         )
-        dispatch(setPostDetails(response.data.post.comments))
-        dispatch(push(routes.details))
+        dispatch(setPostDetails(response.data.post))
+        dispatch(push(routes.details.replace(":id", postId)))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createComment = (text) => async (dispatch, getState) => {
+    const postIdStorage = localStorage.getItem("postId")
+    const body = {
+        text
+    }
+    try {
+        const response = await axios.post(
+            `${baseUrl}/posts/${postIdStorage}/comment`,
+            body, {
+            headers: {
+                auth: token
+            }
+        }
+        )
+        dispatch(getPostDetails(postIdStorage))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const voteComment = (direction, commentId) => async (dispatch, getState) => {
+    const postIdStorage = localStorage.getItem("postId")
+    const body = {
+        direction
+    }
+
+    try {
+        const response = await axios.put(
+        `${baseUrl}/posts/${postIdStorage}/comment/${commentId}/vote`, body, {
+            headers: {
+                auth: token
+            }
+        }
+        )
     } catch (error) {
         console.log(error)
     }
