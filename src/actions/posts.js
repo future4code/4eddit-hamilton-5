@@ -3,7 +3,6 @@ import { push, replace } from "connected-react-router";
 import { routes } from "../containers/Router/";
 
 const baseUrl = "https://us-central1-future-apis.cloudfunctions.net/fourEddit"
-const token = localStorage.getItem("token")
 
 export const setAllPosts = (post) => {
     return {
@@ -14,10 +13,20 @@ export const setAllPosts = (post) => {
     }
 }
 
+export const setPostDetails = (comment) => {
+    return {
+        type: "SET_POST_DETAILS",
+        payload: {
+            comment
+        }
+    }
+}
+
 export const getPosts = () => async (dispatch, getState) => {
+    const token = localStorage.getItem("token")
     try {
         const response = await axios.get(
-            `${baseUrl}/posts`, 
+            `${baseUrl}/posts`,
             {
                 headers: {
                     auth: token
@@ -31,15 +40,15 @@ export const getPosts = () => async (dispatch, getState) => {
 }
 
 export const createPost = (post) => async (dispatch, getState) => {
+    const token = localStorage.getItem("token")
     try {
         const response = await axios.post(
             `${baseUrl}/posts`, post, {
-                headers: {
-                    auth: token
-                }
+            headers: {
+                auth: token
             }
+        }
         )
-        console.log("FOI")
         dispatch(getPosts())
     } catch (error) {
         console.error(error)
@@ -47,22 +56,81 @@ export const createPost = (post) => async (dispatch, getState) => {
 }
 
 export const vote = (direction, id) => async (dispatch, getState) => {
+    const token = localStorage.getItem("token")
     const body = {
         direction
     }
     try {
         const response = await axios.put(
             `${baseUrl}/posts/${id}/vote`, body, {
-                headers: {
-                    auth: token
-                }
+            headers: {
+                auth: token
             }
+        }
         )
-        console.log("Direction na action: ", direction)
         dispatch(getPosts())
     } catch (error) {
         console.error(error)
-        console.log("Direction: ", direction)
-        console.log("ID: ", id)
+    }
+}
+
+export const getPostDetails = (postId) => async (dispatch, getState) => {
+    const token = localStorage.getItem("token")
+    try {
+        const response = await axios.get(
+            `${baseUrl}/posts/${postId}`, {
+            headers: {
+                auth: token
+            }
+        }
+        )
+        localStorage.setItem("postId", postId)
+        dispatch(setPostDetails(response.data.post))
+        dispatch(push(routes.details.replace(":id", postId)))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createComment = (text, postId) => async (dispatch, getState) => {
+    const token = localStorage.getItem("token")
+
+    const body = {
+        text
+    }
+
+    try {
+        const response = await axios.post(
+            `${baseUrl}/posts/${postId}/comment`,
+            body, {
+            headers: {
+                auth: token
+            }
+        }
+        )
+        dispatch(getPostDetails(postId))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const voteComment = (direction, commentId, postId) => async (dispatch, getState) => {
+    const token = localStorage.getItem("token")
+
+    const body = {
+        direction
+    }
+
+    try {
+        const response = await axios.put(
+        `${baseUrl}/posts/${postId}/comment/${commentId}/vote`, body, {
+            headers: {
+                auth: token
+            }
+        }
+        )
+        dispatch(getPostDetails(postId))
+    } catch (error) {
+        console.log(error)
     }
 }
