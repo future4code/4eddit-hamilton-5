@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getPosts, createPost, vote, getPostDetails } from "../../actions/posts";
+import { replace } from "connected-react-router"
+import { routes } from "../Router/index";
 
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
+import arrowUpGrey from "../../img/arrow-up-grey.png"
+import arrowUpColor from "../../img/arrow-up-color.png"
+import arrowDownGrey from "../../img/arrow-down-grey.png"
+import arrowDownColor from "../../img/arrow-down-color.png"
+
 
 const MainWrapper = styled.div`
   padding-top: 30px;
@@ -16,22 +23,67 @@ const WrapperCreatePost = styled.div`
   width: 45%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   background-color: #ffffff;
   margin-bottom: 60px;
-  padding-bottom: 20px;
-`;
-
-const WrapperPost = styled.div`
-  text-align: center;
-  width: 45%;
-  margin-bottom: 10px;
-  background-color: #ffffff;
+  padding: 30px;
+  padding-top: 0px;
+  font-size: 1.5em;
 `;
 
 const InputCreatePost = styled.input` 
 	border-radius: 5px;
 	height: 30px;
+  width: 100%;
+  margin-bottom: 30px;
+`
+const TextAreaCreatePost = styled.textarea` 
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 30px;
+`
+const MainWrapperPost = styled.div`
+  text-align: center;
+  width: 45%;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: 1fr 8fr;
+  grid-template-rows: 4fr 1fr;
+`
+
+const WrapperVote = styled.div`
+  grid-column-start: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+const WrapperPost = styled.div`
+  grid-column-start: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px;
+  font-size: 1.2em;
+  text-align: left;
+`
+const WrapperButton = styled.div`
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+`
+
+const ImageVote = styled.img`
+  height: 30px;
+  object-fit: contain;
+  cursor: pointer;
 `
 
 class Posts extends Component {
@@ -44,6 +96,10 @@ class Posts extends Component {
 
   componentDidMount() {
     this.props.getPosts();
+    const token = localStorage.getItem("token")
+    if(token === null) {
+      this.props.goToLoginPage()
+    }
   }
 
   handleInputChange = (e) => {
@@ -82,8 +138,8 @@ class Posts extends Component {
   render() {
     return (
       <MainWrapper>
-         <h2>Criar Post</h2>
         <WrapperCreatePost>
+        <h1>Criar Post</h1>
           <label htmlFor="title">Título</label>
           <InputCreatePost
             required
@@ -96,7 +152,7 @@ class Posts extends Component {
           <br />
 
           <label htmlFor="text">Post</label>
-          <textarea
+          <TextAreaCreatePost
             required
             type="text"
             name="text"
@@ -104,39 +160,34 @@ class Posts extends Component {
             value={this.state.newPost.text}
             onChange={this.handleInputChange}
           />
-
           <Button color="primary" variant="contained" type="submit" onClick={this.handleCreatePost}>Enviar</Button>
         </WrapperCreatePost>
+
         <h2>Posts populares:</h2>
         {this.props.posts &&
           this.props.posts.map((posts) => {
             return (
-              <WrapperPost key={posts.id}>
-                <p>Usuário: {posts.username}</p>
-                <p>Título: {posts.title}</p>
-                <p>Post: {posts.text}</p>
-                <div>
-                  <button
-                    onClick={() =>
-                      this.handleLikeButton(posts.id, posts.userVoteDirection)
-                    }
-                  >
-                    Like
-                  </button>
-                  <p>Likes: {posts.votesCount}</p>
-                  <button
-                    onClick={() =>
-                      this.handleDislikeButton(
-                        posts.id,
-                        posts.userVoteDirection
-                      )
-                    }
-                  >
-                    Dislike
-                  </button>
-                  <Button color="secondary" variant="contained" type="submit" onClick={()=> this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</Button>
-                </div>
-              </WrapperPost>
+              <MainWrapperPost key={posts.id}>
+
+                <WrapperVote>
+                  <ImageVote src={arrowUpGrey}
+                    onClick={() =>this.handleLikeButton(posts.id, posts.userVoteDirection)}
+                  />
+                  <p>{posts.votesCount}</p>
+                  <ImageVote src={arrowDownGrey}
+                    onClick={() => this.handleDislikeButton(posts.id, posts.userVoteDirection)}
+                  />
+                </WrapperVote>
+
+                <WrapperPost>
+                  <h2>{posts.title}</h2>
+                  <p><strong>Usuário:</strong> {posts.username}</p>
+                  <p>{posts.text}</p>
+                </WrapperPost>
+                <WrapperButton>
+                  <Button color="primary" variant="contained" type="submit" onClick={()=> this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</Button>
+                </WrapperButton>
+              </MainWrapperPost>
             );
           })}
       </MainWrapper>
@@ -152,7 +203,8 @@ const mapDispatchToProps = (dispatch) => ({
   getPosts: () => dispatch(getPosts()),
   createPost: (post) => dispatch(createPost(post)),
   vote: (direction, id) => dispatch(vote(direction, id)),
-  getPostDetails: (postId) => dispatch(getPostDetails(postId))
+  getPostDetails: (postId) => dispatch(getPostDetails(postId)),
+  goToLoginPage: () => dispatch(replace(routes.login))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

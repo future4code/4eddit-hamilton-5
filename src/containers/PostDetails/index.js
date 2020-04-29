@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import routes from "../Router"
+import { routes } from "../Router"
 import { replace } from "connected-react-router"
-import styled from "styled-components";
 import { getPostDetails, createComment, voteComment } from "../../actions/posts"
+import styled from "styled-components";
 
 const WrapperComment = styled.div`
   border: 1px solid black;
@@ -18,8 +18,13 @@ class PostDetails extends Component {
   }
 
   componentDidMount () {
-    console.log(this.props)
+    const token = localStorage.getItem("token")
     const postId = this.props.match.params.id
+
+    if(token === null) {
+      this.props.goToLoginPage()
+    }
+
     if(this.props.getPostDetails && postId){
      this.props.getPostDetails(postId)
     } else {
@@ -35,6 +40,8 @@ class PostDetails extends Component {
     e.preventDefault()
     const postId = this.props.match.params.id
     this.props.createComment(this.state.comment, postId)
+
+    this.setState({comment: ""})
   }
 
   handleLikeButton = (commentId, likeDirection) => {
@@ -93,7 +100,8 @@ const mapDispatchToProps = (dispatch) => ({
   createComment: (text, postId) => dispatch(createComment(text, postId)),
   getPostDetails: (postId) => dispatch(getPostDetails(postId)),
   goToPosts: () => dispatch(replace(routes.posts)),
-  voteComment:(direction, commentId, postId) => dispatch(voteComment(direction, commentId, postId))
+  voteComment:(direction, commentId, postId) => dispatch(voteComment(direction, commentId, postId)),
+  goToLoginPage: () => dispatch(replace(routes.login))
 })
 
 

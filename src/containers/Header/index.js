@@ -2,7 +2,6 @@ import React from 'react'
 import { push } from "connected-react-router";
 import { routes } from "../Router/index";
 import { connect } from "react-redux";
-
 import styled from "styled-components"
 import logo from "../../img/4eddit.png"
 
@@ -20,7 +19,7 @@ class Header extends React.Component {
     render () {
         return (
             <HeaderBar>
-                <Logo onClick={this.props.goPosts} src={logo}/>
+                <Logo onClick={this.props.goToPosts} src={logo}/>
             </HeaderBar>
         )
     }
@@ -28,7 +27,7 @@ class Header extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-      goPosts: () => dispatch(push(routes.posts))
+      goToPosts: () => dispatch(push(routes.posts))
     };
   }
   

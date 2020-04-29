@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { push } from "connected-react-router";
+import { push, replace } from "connected-react-router";
 import { routes } from "../Router/index";
-import styled from "styled-components";
 import { login } from "../../actions/users"
+import styled from "styled-components";
 
 const Form = styled.form``;
 
@@ -26,6 +26,13 @@ class LoginPage extends Component {
     login: {},
   };
 
+  componentDidMount () {
+    const token = localStorage.getItem("token")
+    if(token !== null) {
+      this.props.goToPosts()
+    }
+  }
+
   handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -36,8 +43,6 @@ class LoginPage extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.login);
-
     this.props.signin(this.state.login);
   };
   
@@ -70,7 +75,8 @@ class LoginPage extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   goToSignupScreen: () => dispatch(push(routes.signup)),
-  signin: (body) => dispatch(login(body))
+  signin: (body) => dispatch(login(body)), 
+  goToPosts: () => dispatch(replace(routes.posts))
 });
 
 export default connect(null, mapDispatchToProps)(LoginPage);

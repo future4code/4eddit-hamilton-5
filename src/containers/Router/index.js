@@ -8,7 +8,7 @@ import PostDetails from "../PostDetails";
 import Header from "../Header"
 
 export const routes = {
-  root: "/",
+  login: "/",
   signup: "/signup",
   posts: "/posts",
   details: "/post/details/:id"
@@ -19,7 +19,7 @@ function Router(props) {
     <ConnectedRouter history={props.history}>
       <Header/>
       <Switch>
-        <Route exact path={routes.root} component={LoginPage} />
+        <Route exact path={routes.login} component={LoginPage} />
         <Route exact path={routes.signup} component={Signup} />
         <Route exact path={routes.posts} component={Posts} />
         <Route exact path={routes.details} component={PostDetails} />
