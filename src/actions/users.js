@@ -4,7 +4,7 @@ import { routes } from "../containers/Router/";
 
 const baseUrl = "https://us-central1-future-apis.cloudfunctions.net/fourEddit"
 
-export const signUp = (body) => async (dispatch, getState) => {
+export const signUp = (body) => async (dispatch) => {
   try {
     const response = await axios.post(
       `${baseUrl}/signup`,
@@ -18,7 +18,7 @@ export const signUp = (body) => async (dispatch, getState) => {
   }
 };
 
-export const login = (body) => async (dispatch, getState) => {
+export const login = (body) => async (dispatch) => {
     try {
         const response = await axios.post(
             `${baseUrl}/login`, body 

@@ -1,26 +1,48 @@
 import React from 'react'
-import { push } from "connected-react-router";
+import { push, replace } from "connected-react-router";
 import { routes } from "../Router/index";
 import { connect } from "react-redux";
-
+import Button from "@material-ui/core/Button";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import styled from "styled-components"
 import logo from "../../img/4eddit.png"
 
 const HeaderBar = styled.header ` 
     background-color: #E78062;
-    padding: 15px 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
 `
 const Logo = styled.img ` 
-    height: 80px;
+    height: 60px;
     margin-left: 2%;
     cursor: pointer;
 `
 
+const ExitToAppIconStyled = styled(ExitToAppIcon)`
+    height: 40px ;
+    width: 40px;
+    color: white;
+    align-self: center;
+    margin-right: 2%;
+    cursor: pointer;
+`
+
+
 class Header extends React.Component {
+
+    handleLogout = () => {
+        localStorage.clear()
+        this.props.goToLoginPage()
+    }
+    
+
     render () {
+        const isLogged = localStorage.getItem("token") !== null
         return (
             <HeaderBar>
-                <Logo onClick={this.props.goPosts} src={logo}/>
+                <Logo onClick={this.props.goToPosts} src={logo}/>
+                {isLogged && <ExitToAppIconStyled fontSize="large" onClick={this.handleLogout}/> }
             </HeaderBar>
         )
     }
@@ -28,7 +50,8 @@ class Header extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-      goPosts: () => dispatch(push(routes.posts))
+      goToPosts: () => dispatch(push(routes.posts)),
+      goToLoginPage: () => dispatch(replace(routes.login))
     };
   }
   

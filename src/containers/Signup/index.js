@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import { signUp } from "../../actions/users";
 import { connect } from "react-redux";
 import { replace } from "connected-react-router";
 import { routes } from "../Router/index";
+import Header from "../Header"
+import styled from "styled-components";
 
 const Form = styled.form``;
 
@@ -35,6 +36,13 @@ class Signup extends Component {
     form: {},
   };
 
+  componentDidMount() {
+    const token = localStorage.getItem("token")
+    if (token !== null) {
+      this.props.goToPosts()
+    }
+  }
+
   handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -45,41 +53,43 @@ class Signup extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.form);
-
     this.props.signUp(this.state.form)
   };
 
   render() {
     return (
-      <div>
-        <Form onSubmit={this.handleSubmit}>
-          {signupForm.map((input) => {
-            return (
-              <div key={input.name}>
-                <label htmlFor={input.name}>{input.label}</label>
-                <input
-                  required
-                  name={input.name}
-                  type={input.type}
-                  title={input.title}
-                  pattern={input.pattern}
-                  value={this.state.form[input.name] || ""}
-                  onChange={this.handleInputChange}
-                />
-              </div>
-            );
-          })}
+      <>
+        <Header />
+        <div>
+          <Form onSubmit={this.handleSubmit}>
+            {signupForm.map((input) => {
+              return (
+                <div key={input.name}>
+                  <label htmlFor={input.name}>{input.label}</label>
+                  <input
+                    required
+                    name={input.name}
+                    type={input.type}
+                    title={input.title}
+                    pattern={input.pattern}
+                    value={this.state.form[input.name] || ""}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+              );
+            })}
 
-          <button type="submit">Cadastrar</button>
-        </Form>
-      </div>
+            <button type="submit">Cadastrar</button>
+          </Form>
+        </div>
+      </>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  signUp: (body) => dispatch(signUp(body))
+  signUp: (body) => dispatch(signUp(body)),
+  goToPosts: () => dispatch(replace(routes.posts))
 });
 
-export default connect(null, mapDispatchToProps) (Signup);
+export default connect(null, mapDispatchToProps)(Signup);
