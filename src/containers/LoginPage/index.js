@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { push, replace } from "connected-react-router";
 import { routes } from "../Router/index";
 import { login } from "../../actions/users"
+import Header from "../Header"
 import styled from "styled-components";
 
 const Form = styled.form``;
@@ -49,6 +50,7 @@ class LoginPage extends Component {
   render() {
     return (
       <div>
+        <Header />
         <Form onSubmit = {this.handleSubmit}>
           {loginForm.map((input) => {
             return (

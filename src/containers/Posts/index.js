@@ -4,6 +4,7 @@ import { getPosts, createPost, vote, getPostDetails } from "../../actions/posts"
 import { replace } from "connected-react-router"
 import { routes } from "../Router/index";
 
+import Header from "../Header"
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import arrowUpGrey from "../../img/arrow-up-grey.png"
@@ -97,7 +98,7 @@ class Posts extends Component {
   componentDidMount() {
     this.props.getPosts();
     const token = localStorage.getItem("token")
-    if(token === null) {
+    if (token === null) {
       this.props.goToLoginPage()
     }
   }
@@ -137,60 +138,63 @@ class Posts extends Component {
 
   render() {
     return (
-      <MainWrapper>
-        <WrapperCreatePost>
-        <h1>Criar Post</h1>
-          <label htmlFor="title">Título</label>
-          <InputCreatePost
-            required
-            type="text"
-            name="title"
-            value={this.state.newPost.title}
-            onChange={this.handleInputChange}
-          />
+      <>
+        <Header />
+        <MainWrapper>
+          <WrapperCreatePost>
+            <h1>Criar Post</h1>
+            <label htmlFor="title">Título</label>
+            <InputCreatePost
+              required
+              type="text"
+              name="title"
+              value={this.state.newPost.title}
+              onChange={this.handleInputChange}
+            />
 
-          <br />
+            <br />
 
-          <label htmlFor="text">Post</label>
-          <TextAreaCreatePost
-            required
-            type="text"
-            name="text"
-            rows="5"
-            value={this.state.newPost.text}
-            onChange={this.handleInputChange}
-          />
-          <Button color="primary" variant="contained" type="submit" onClick={this.handleCreatePost}>Enviar</Button>
-        </WrapperCreatePost>
+            <label htmlFor="text">Post</label>
+            <TextAreaCreatePost
+              required
+              type="text"
+              name="text"
+              rows="5"
+              value={this.state.newPost.text}
+              onChange={this.handleInputChange}
+            />
+            <Button color="primary" variant="contained" type="submit" onClick={this.handleCreatePost}>Enviar</Button>
+          </WrapperCreatePost>
 
-        <h2>Posts populares:</h2>
-        {this.props.posts &&
-          this.props.posts.map((posts) => {
-            return (
-              <MainWrapperPost key={posts.id}>
+          <h2>Posts populares:</h2>
+          {this.props.posts &&
+            this.props.posts.map((posts) => {
+              return (
+                <MainWrapperPost key={posts.id}>
 
-                <WrapperVote>
-                  <ImageVote src={arrowUpGrey}
-                    onClick={() =>this.handleLikeButton(posts.id, posts.userVoteDirection)}
-                  />
-                  <p>{posts.votesCount}</p>
-                  <ImageVote src={arrowDownGrey}
-                    onClick={() => this.handleDislikeButton(posts.id, posts.userVoteDirection)}
-                  />
-                </WrapperVote>
+                  <WrapperVote>
+                    <ImageVote src={arrowUpGrey}
+                      onClick={() => this.handleLikeButton(posts.id, posts.userVoteDirection)}
+                    />
+                    <p>{posts.votesCount}</p>
+                    <ImageVote src={arrowDownGrey}
+                      onClick={() => this.handleDislikeButton(posts.id, posts.userVoteDirection)}
+                    />
+                  </WrapperVote>
 
-                <WrapperPost>
-                  <h2>{posts.title}</h2>
-                  <p><strong>Usuário:</strong> {posts.username}</p>
-                  <p>{posts.text}</p>
-                </WrapperPost>
-                <WrapperButton>
-                  <Button color="primary" variant="contained" type="submit" onClick={()=> this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</Button>
-                </WrapperButton>
-              </MainWrapperPost>
-            );
-          })}
-      </MainWrapper>
+                  <WrapperPost>
+                    <h2>{posts.title}</h2>
+                    <p><strong>Usuário:</strong> {posts.username}</p>
+                    <p>{posts.text}</p>
+                  </WrapperPost>
+                  <WrapperButton>
+                    <Button color="primary" variant="contained" type="submit" onClick={() => this.props.getPostDetails(posts.id)}>Comentários: {posts.commentsCount}</Button>
+                  </WrapperButton>
+                </MainWrapperPost>
+              );
+            })}
+        </MainWrapper>
+      </>
     );
   }
 }

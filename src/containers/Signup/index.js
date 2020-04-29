@@ -3,6 +3,7 @@ import { signUp } from "../../actions/users";
 import { connect } from "react-redux";
 import { replace } from "connected-react-router";
 import { routes } from "../Router/index";
+import Header from "../Header"
 import styled from "styled-components";
 
 const Form = styled.form``;
@@ -35,9 +36,9 @@ class Signup extends Component {
     form: {},
   };
 
-  componentDidMount () {
+  componentDidMount() {
     const token = localStorage.getItem("token")
-    if(token !== null) {
+    if (token !== null) {
       this.props.goToPosts()
     }
   }
@@ -57,28 +58,31 @@ class Signup extends Component {
 
   render() {
     return (
-      <div>
-        <Form onSubmit={this.handleSubmit}>
-          {signupForm.map((input) => {
-            return (
-              <div key={input.name}>
-                <label htmlFor={input.name}>{input.label}</label>
-                <input
-                  required
-                  name={input.name}
-                  type={input.type}
-                  title={input.title}
-                  pattern={input.pattern}
-                  value={this.state.form[input.name] || ""}
-                  onChange={this.handleInputChange}
-                />
-              </div>
-            );
-          })}
+      <>
+        <Header />
+        <div>
+          <Form onSubmit={this.handleSubmit}>
+            {signupForm.map((input) => {
+              return (
+                <div key={input.name}>
+                  <label htmlFor={input.name}>{input.label}</label>
+                  <input
+                    required
+                    name={input.name}
+                    type={input.type}
+                    title={input.title}
+                    pattern={input.pattern}
+                    value={this.state.form[input.name] || ""}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+              );
+            })}
 
-          <button type="submit">Cadastrar</button>
-        </Form>
-      </div>
+            <button type="submit">Cadastrar</button>
+          </Form>
+        </div>
+      </>
     );
   }
 }
@@ -88,4 +92,4 @@ const mapDispatchToProps = (dispatch) => ({
   goToPosts: () => dispatch(replace(routes.posts))
 });
 
-export default connect(null, mapDispatchToProps) (Signup);
+export default connect(null, mapDispatchToProps)(Signup);

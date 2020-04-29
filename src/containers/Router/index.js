@@ -5,7 +5,6 @@ import LoginPage from "../LoginPage";
 import Signup from "../Signup";
 import Posts from "../Posts";
 import PostDetails from "../PostDetails";
-import Header from "../Header"
 
 export const routes = {
   login: "/",
@@ -17,7 +16,6 @@ export const routes = {
 function Router(props) {
   return (
     <ConnectedRouter history={props.history}>
-      <Header/>
       <Switch>
         <Route exact path={routes.login} component={LoginPage} />
         <Route exact path={routes.signup} component={Signup} />

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { routes } from "../Router"
 import { replace } from "connected-react-router"
 import { getPostDetails, createComment, voteComment } from "../../actions/posts"
+import Header from "../Header"
 import styled from "styled-components";
 
 const WrapperComment = styled.div`
@@ -17,23 +18,23 @@ class PostDetails extends Component {
     comment: ""
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const token = localStorage.getItem("token")
     const postId = this.props.match.params.id
 
-    if(token === null) {
+    if (token === null) {
       this.props.goToLoginPage()
     }
 
-    if(this.props.getPostDetails && postId){
-     this.props.getPostDetails(postId)
+    if (this.props.getPostDetails && postId) {
+      this.props.getPostDetails(postId)
     } else {
       this.props.goToPosts()
     }
   }
 
   handleComment = (e) => {
-    this.setState({comment: e.target.value})
+    this.setState({ comment: e.target.value })
   }
 
   submitComment = (e) => {
@@ -41,7 +42,7 @@ class PostDetails extends Component {
     const postId = this.props.match.params.id
     this.props.createComment(this.state.comment, postId)
 
-    this.setState({comment: ""})
+    this.setState({ comment: "" })
   }
 
   handleLikeButton = (commentId, likeDirection) => {
@@ -64,29 +65,32 @@ class PostDetails extends Component {
 
   render() {
     return (
-      <div>
-        <div>Título do post: {this.props.post.title}</div>
-        <div>Descrição do post: {this.props.post.text}</div>
+      <>
+        <Header />
         <div>
-          <label htmlFor="comment">Escreva um comentário</label>
-          <input name="comment" required value={this.state.comment} onChange={this.handleComment}/>
-          <button onClick={this.submitComment}>Enviar</button>
-        </div>
-        {this.props.comments && this.props.comments.map(comment => {
-          return (
-            <WrapperComment key={comment.id} >
-              <p>Usuário: {comment.username} </p>
-              <p>Comentário: {comment.text} </p>
+          <div>Título do post: {this.props.post.title}</div>
+          <div>Descrição do post: {this.props.post.text}</div>
+          <div>
+            <label htmlFor="comment">Escreva um comentário</label>
+            <input name="comment" required value={this.state.comment} onChange={this.handleComment} />
+            <button onClick={this.submitComment}>Enviar</button>
+          </div>
+          {this.props.comments && this.props.comments.map(comment => {
+            return (
+              <WrapperComment key={comment.id} >
+                <p>Usuário: {comment.username} </p>
+                <p>Comentário: {comment.text} </p>
                 <div>
                   <p>DIRECTION {comment.userVoteDirection} </p>
                   <p> Likes {comment.votesCount}</p>
                   <button onClick={() => this.handleLikeButton(comment.id, comment.userVoteDirection)}>Like</button>
                   <button onClick={() => this.handleDislikeButton(comment.id, comment.userVoteDirection)} > Dislike</button>
                 </div>
-            </WrapperComment>
-          )
-        })}
-      </div>
+              </WrapperComment>
+            )
+          })}
+        </div>
+      </>
     );
   }
 }
@@ -100,7 +104,7 @@ const mapDispatchToProps = (dispatch) => ({
   createComment: (text, postId) => dispatch(createComment(text, postId)),
   getPostDetails: (postId) => dispatch(getPostDetails(postId)),
   goToPosts: () => dispatch(replace(routes.posts)),
-  voteComment:(direction, commentId, postId) => dispatch(voteComment(direction, commentId, postId)),
+  voteComment: (direction, commentId, postId) => dispatch(voteComment(direction, commentId, postId)),
   goToLoginPage: () => dispatch(replace(routes.login))
 })
 
