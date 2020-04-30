@@ -5,8 +5,26 @@ import { routes } from "../Router/index";
 import { login } from "../../actions/users"
 import Header from "../Header"
 import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
-const Form = styled.form``;
+const MainWrapperLogin = styled.div`
+  height: 90vh;
+  display: flex;
+  align-items: center;
+`
+
+const LoginWrapper = styled.form`
+  margin: 0 auto;
+  gap: 10px;
+  place-content: center;
+  justify-items: center;
+  display: grid;
+`;
+
+const ButtonStyled = styled(Button)`
+  color: #ffffff;
+`
 
 const loginForm = [
   {
@@ -49,28 +67,31 @@ class LoginPage extends Component {
   
   render() {
     return (
-      <div>
+      <>
         <Header />
-        <Form onSubmit = {this.handleSubmit}>
-          {loginForm.map((input) => {
-            return (
-              <div key={input.name}>
-                <label htmlFor={input.name}>{input.label}</label>
-                <input
-                  required
-                  name={input.name}
-                  type={input.type}
-                  title={input.title}
-                  value={this.state.login[input.name] || ""}
-                  onChange={this.handleInputChange}
-                />
-              </div>
-            );
-          })}
-          <button type= "submit">Entrar</button>
-        </Form>
-        <button onClick={() => this.props.goToSignupScreen()}>Cadastrar</button>
-      </div>
+        <MainWrapperLogin>
+          <LoginWrapper onSubmit = {this.handleSubmit}>
+            {loginForm.map((input) => {
+              return (
+                <div key={input.name}>
+                  <TextField
+                    label={input.label}
+                    required
+                    name={input.name}
+                    type={input.type}
+                    title={input.title}
+                    value={this.state.login[input.name] || ""}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+              );
+            })}
+            <Button color="secondary" variant="contained" type="submit">Entrar</Button>
+            <p>OU</p>
+            <ButtonStyled color="primary" variant="contained" onClick={() => this.props.goToSignupScreen()}>Cadastrar</ButtonStyled>
+          </LoginWrapper>
+        </MainWrapperLogin>  
+      </>
     );
   }
 }
