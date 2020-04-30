@@ -169,7 +169,7 @@ class PostDetails extends Component {
 
           {this.props.comments && this.props.comments.map(comment => {
             return (
-              <MainWrapperComments>
+              <MainWrapperComments key = {comment.id}>
                 <div>
                   {this.renderIconLike(comment.id, comment.userVoteDirection)}
                   <p>{comment.votesCount}</p>

@@ -14,6 +14,7 @@ import arrowDownColor from "../../img/arrow-down-color.png"
 
 
 const MainWrapper = styled.div`
+  min-height: 100vh;
   padding-top: 30px;
   background-color: #D9D9D9;
   display: flex;
@@ -106,6 +107,8 @@ class Posts extends Component {
       text: "",
       title: "",
     },
+    filterText: "",
+    selectValue: ""
   };
 
   componentDidMount() {
@@ -133,6 +136,14 @@ class Posts extends Component {
     });
   };
 
+  handleInputSearch = (e) => {
+    this.setState({filterText: e.target.value})
+  }
+
+  handleSelect = (e) => {
+    this.setState({selectValue: e.target.value})
+  }
+
   handleLikeButton = (id, likeDirection) => {
     if (likeDirection === 0 || likeDirection === -1) {
       this.props.vote(1, id);
@@ -148,7 +159,6 @@ class Posts extends Component {
       this.props.vote(0, id);
     }
   };
-
 
   renderIconLike = (postId, direction) => {
     if (direction === 0 || direction === -1) {
@@ -174,9 +184,18 @@ class Posts extends Component {
     }
   }
 
-  
-
   render() {
+    const filterPosts = this.props.posts.filter(post => { 
+      if(this.state.filterText === "") {
+        return (
+          post
+        )
+      } else {
+        const search = this.state.filterText.toLowerCase()
+        return post.title && post.title.toLowerCase().includes(search)
+      }
+    })
+
     return (
       <>
         <Header />
@@ -205,21 +224,34 @@ class Posts extends Component {
             />
             <Button color="secondary" variant="contained" type="submit" onClick={this.handleCreatePost}>Enviar</Button>
           </WrapperCreatePost>
+
+
+          <input
+            value= {this.state.filterText}
+            onChange= {this.handleInputSearch}
+          />
+          
+          <select value = {this.state.selectValue} onChange = {this.handleSelect}>
+            <option value = {"like"}>Mais Curtidos</option>
+            <option value = {"comments"}>Mais Comentados</option>
+          </select>
+
+
           <WrapperTitle>
-            <h1>Posts populares:</h1>
+            <h1>Posts:</h1>
           </WrapperTitle>
           {this.props.posts &&
-            this.props.posts.map((posts) => {
+            filterPosts.map((posts) => {
               return (
                 <MainWrapperPost key={posts.id}>
 
-                  <WrapperVote>
+                  <WrapperVote key = {posts.username}>
                     {this.renderIconLike(posts.id, posts.userVoteDirection)}
                     <p>{posts.votesCount}</p>
                     {this.renderIconDislike(posts.id, posts.userVoteDirection)}
                   </WrapperVote>
 
-                  <WrapperPost>
+                  <WrapperPost key = {posts.title}>
                     <h2>{posts.title}</h2> 
                     <p><strong>{posts.username}: </strong> {posts.text}</p>
                   </WrapperPost>
