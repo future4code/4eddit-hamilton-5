@@ -1,6 +1,7 @@
 const initialState = {
     posts: [],
-    post: []
+    post: null,
+    isLoading: false
 }
 
 const posts = (state = initialState, action) => {
@@ -10,6 +11,9 @@ const posts = (state = initialState, action) => {
         }
         case "SET_POST_DETAILS": {
             return {...state, post: action.payload.comment}
+        }
+        case "SET_LOADING": {
+            return {...state, isLoading: action.payload.loading}
         }
         default:
             return state

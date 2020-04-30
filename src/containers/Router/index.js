@@ -6,6 +6,8 @@ import Signup from "../Signup";
 import Posts from "../Posts";
 import PostDetails from "../PostDetails";
 import ErrorPage from "../ErrorPage"
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { connect } from "react-redux"
 
 export const routes = {
   login: "/",
@@ -17,6 +19,7 @@ export const routes = {
 function Router(props) {
   return (
     <ConnectedRouter history={props.history}>
+      {props.loading && <LinearProgress/>}
       <Switch>
         <Route exact path={routes.login} component={LoginPage} />
         <Route exact path={routes.signup} component={Signup} />
@@ -28,4 +31,8 @@ function Router(props) {
   );
 }
 
-export default Router;
+const mapStateToProps = (state) => ({
+  loading: state.posts.isLoading
+})
+
+export default connect(mapStateToProps)(Router);
