@@ -5,12 +5,13 @@ import LoginPage from "../LoginPage";
 import Signup from "../Signup";
 import Posts from "../Posts";
 import PostDetails from "../PostDetails";
+import ErrorPage from "../ErrorPage"
 
 export const routes = {
   login: "/",
   signup: "/signup",
   posts: "/posts",
-  details: "/post/details/:id"
+  details: "/post/details/:id",
 };
 
 function Router(props) {
@@ -21,6 +22,7 @@ function Router(props) {
         <Route exact path={routes.signup} component={Signup} />
         <Route exact path={routes.posts} component={Posts} />
         <Route exact path={routes.details} component={PostDetails} />
+        <Route component={ErrorPage} />
       </Switch>
     </ConnectedRouter>
   );

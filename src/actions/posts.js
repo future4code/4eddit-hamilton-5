@@ -55,14 +55,14 @@ export const createPost = (post) => async (dispatch) => {
     }
 }
 
-export const vote = (direction, id) => async (dispatch) => {
+export const vote = (direction, postId) => async (dispatch) => {
     const token = localStorage.getItem("token")
     const body = {
         direction
     }
     try {
         await axios.put(
-            `${baseUrl}/posts/${id}/vote`, body, {
+            `${baseUrl}/posts/${postId}/vote`, body, {
             headers: {
                 auth: token
             }
