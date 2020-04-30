@@ -5,8 +5,26 @@ import { replace } from "connected-react-router";
 import { routes } from "../Router/index";
 import Header from "../Header"
 import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
-const Form = styled.form``;
+const MainWrapperLogin = styled.div`
+  height: 90vh;
+  display: flex;
+  align-items: center;
+`
+
+const LoginWrapper = styled.form`
+  margin: 0 auto;
+  gap: 10px;
+  place-content: center;
+  justify-items: center;
+  display: grid;
+`;
+
+const ButtonStyled = styled(Button)`
+  color: #ffffff;
+`
 
 const signupForm = [
   {
@@ -60,13 +78,13 @@ class Signup extends Component {
     return (
       <>
         <Header />
-        <div>
-          <Form onSubmit={this.handleSubmit}>
+        <MainWrapperLogin>
+          <LoginWrapper onSubmit={this.handleSubmit}>
             {signupForm.map((input) => {
               return (
                 <div key={input.name}>
-                  <label htmlFor={input.name}>{input.label}</label>
-                  <input
+                  <TextField
+                    label= {input.label}
                     required
                     name={input.name}
                     type={input.type}
@@ -79,9 +97,9 @@ class Signup extends Component {
               );
             })}
 
-            <button type="submit">Cadastrar</button>
-          </Form>
-        </div>
+            <ButtonStyled color="primary" variant="contained" type="submit">Cadastrar</ButtonStyled>
+          </LoginWrapper>
+        </MainWrapperLogin>
       </>
     );
   }
