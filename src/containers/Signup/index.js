@@ -3,35 +3,16 @@ import { signUp } from "../../actions/users";
 import { connect } from "react-redux";
 import { replace } from "connected-react-router";
 import { routes } from "../Router/index";
-import Header from "../Header"
-import styled from "styled-components";
+import Header from "../Header";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-
-const MainWrapperLogin = styled.div`
-  height: 90vh;
-  display: flex;
-  align-items: center;
-`
-
-const LoginWrapper = styled.form`
-  margin: 0 auto;
-  gap: 10px;
-  place-content: center;
-  justify-items: center;
-  display: grid;
-`;
-
-const ButtonStyled = styled(Button)`
-  color: #ffffff;
-`
+import { MainWrapperLogin, LoginWrapper, ButtonStyled } from "./style";
 
 const signupForm = [
   {
     name: "username",
     type: "text",
     label: "Nome de usuário",
-    pattern: "[A-Za-zçÇ]{5,}",
+    pattern: "[A-Za-zçÇ0-9]{5,}",
     title: "Mínimo 5 caracteres",
   },
   {
@@ -44,7 +25,7 @@ const signupForm = [
     name: "password",
     type: "password",
     label: "Senha ",
-    pattern: "[A-Za-zçÇ]{6,}",
+    pattern: "[A-Za-zçÇ0-9]{6,}",
     title: "Mínimo 6 caracteres",
   },
 ];
@@ -55,9 +36,9 @@ class Signup extends Component {
   };
 
   componentDidMount() {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     if (token !== null) {
-      this.props.goToPosts()
+      this.props.goToPosts();
     }
   }
 
@@ -71,7 +52,7 @@ class Signup extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.signUp(this.state.form)
+    this.props.signUp(this.state.form);
   };
 
   render() {
@@ -84,12 +65,14 @@ class Signup extends Component {
               return (
                 <div key={input.name}>
                   <TextField
-                    label= {input.label}
+                    label={input.label}
                     required
                     name={input.name}
                     type={input.type}
-                    title={input.title}
-                    pattern={input.pattern}
+                    inputProps={{
+                      pattern: input.pattern,
+                      title: input.title,
+                    }}
                     value={this.state.form[input.name] || ""}
                     onChange={this.handleInputChange}
                   />
@@ -97,7 +80,9 @@ class Signup extends Component {
               );
             })}
 
-            <ButtonStyled color="primary" variant="contained" type="submit">Cadastrar</ButtonStyled>
+            <ButtonStyled color="primary" variant="contained" type="submit">
+              Cadastrar
+            </ButtonStyled>
           </LoginWrapper>
         </MainWrapperLogin>
       </>
@@ -107,7 +92,7 @@ class Signup extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   signUp: (body) => dispatch(signUp(body)),
-  goToPosts: () => dispatch(replace(routes.posts))
+  goToPosts: () => dispatch(replace(routes.posts)),
 });
 
 export default connect(null, mapDispatchToProps)(Signup);

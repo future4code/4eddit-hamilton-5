@@ -1,6 +1,8 @@
 import axios from "axios";
 import { push } from "connected-react-router";
 import { routes } from "../containers/Router/";
+import { setLoading } from "./global";
+
 
 const baseUrl = "https://us-central1-future-apis.cloudfunctions.net/fourEddit"
 
@@ -42,6 +44,7 @@ export const getPosts = () => async (dispatch) => {
 export const createPost = (post) => async (dispatch) => {
     const token = localStorage.getItem("token")
     try {
+        dispatch(setLoading(true))
         await axios.post(
             `${baseUrl}/posts`, post, {
             headers: {
@@ -50,6 +53,8 @@ export const createPost = (post) => async (dispatch) => {
         }
         )
         dispatch(getPosts())
+        dispatch(setLoading(false))
+
     } catch (error) {
         console.error(error)
     }
@@ -77,6 +82,7 @@ export const vote = (direction, postId) => async (dispatch) => {
 export const getPostDetails = (postId) => async (dispatch) => {
     const token = localStorage.getItem("token")
     try {
+        dispatch(setLoading(true))
         const response = await axios.get(
             `${baseUrl}/posts/${postId}`, {
             headers: {
@@ -84,9 +90,9 @@ export const getPostDetails = (postId) => async (dispatch) => {
             }
         }
         )
-        localStorage.setItem("postId", postId)
         dispatch(setPostDetails(response.data.post))
         dispatch(push(routes.details.replace(":id", postId)))
+        dispatch(setLoading(false))
     } catch (error) {
         console.error(error)
     }
@@ -100,6 +106,7 @@ export const createComment = (text, postId) => async (dispatch) => {
     }
 
     try {
+        dispatch(setLoading(true))
         await axios.post(
             `${baseUrl}/posts/${postId}/comment`,
             body, {
@@ -109,6 +116,8 @@ export const createComment = (text, postId) => async (dispatch) => {
         }
         )
         dispatch(getPostDetails(postId))
+        dispatch(setLoading(false))
+
     } catch (error) {
         console.error(error)
     }
