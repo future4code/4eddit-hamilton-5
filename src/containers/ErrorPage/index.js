@@ -1,12 +1,18 @@
 import React from "react"
+import NotFound from "../../img/ghost.png"
+import Header from "../Header";
+import { WrapperErrorPage, ImageNotFound } from "./style";
 
 class ErrorPage extends React.Component {
-
   render() {
     return (
-      <div>
-        ERRO 404
-      </div>
+      <>
+        <Header />
+        <WrapperErrorPage>
+          <h1>Página não encontrada</h1>
+          <ImageNotFound src={NotFound}></ImageNotFound>
+        </WrapperErrorPage>
+      </>
     );
   }
 }

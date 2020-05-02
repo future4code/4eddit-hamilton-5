@@ -22,6 +22,8 @@ import {
   InputCreatePost,
   TextAreaCreatePost,
   WrapperTitle,
+  WrapperSearch,
+  InputSearchPost,
   MainWrapperPost,
   WrapperVote,
   WrapperPost,
@@ -165,14 +167,16 @@ class Posts extends Component {
             </Button>
           </WrapperCreatePost>
 
-          <input
-            value={this.state.filterText}
-            onChange={this.handleInputSearch}
-          />
-
           <WrapperTitle>
             <h1>Posts:</h1>
           </WrapperTitle>
+          <WrapperSearch>
+            <p>Buscar post por título: </p>
+            <InputSearchPost
+            value={this.state.filterText}
+            onChange={this.handleInputSearch}
+          />
+          </WrapperSearch>
 
           {postsToString === "[]" ? (
             <CircularProgress />
