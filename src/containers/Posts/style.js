@@ -47,6 +47,22 @@ export const WrapperTitle = styled.div`
   padding-left: 15px;
 `;
 
+export const WrapperSearch = styled.div`
+  width: 45%;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  justify-content: flex-start;
+  font-size: 1.3em;
+`
+export const InputSearchPost = styled.input`
+border-radius: 5px;
+height: 30px;
+margin-left: 20px;
+font-size: 1em;
+`;
+
+
 export const MainWrapperPost = styled.div`
   text-align: center;
   width: 45%;
