@@ -18,3 +18,8 @@ export const LoginWrapper = styled.form`
 export const ButtonStyled = styled(Button)`
   color: #ffffff;
 `
+
+export const ErrorMessage = styled.p` 
+  color: #E78062;
+  font-weight: bold;
+`
