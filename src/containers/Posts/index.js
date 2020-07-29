@@ -132,7 +132,7 @@ class Posts extends Component {
       }
     });
 
-    const postsToString = JSON.stringify(this.props.posts)
+
     return (
       <>
         <Header />
@@ -178,7 +178,7 @@ class Posts extends Component {
           />
           </WrapperSearch>
 
-          {postsToString === "[]" ? (
+          {this.props.posts.length === 0 ? (
             <CircularProgress />
           ) : (
             filterPosts.map((posts) => {

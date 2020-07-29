@@ -5,6 +5,16 @@ import { setLoading } from "./global";
 
 const baseUrl = "https://us-central1-future-apis.cloudfunctions.net/fourEddit";
 
+export const setLoginError = (error) => {
+  return {
+      type: "SET_LOGIN_ERROR",
+      payload: {
+          error
+      }
+  }
+}
+
+
 export const signUp = (body) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
@@ -30,5 +40,7 @@ export const login = (body) => async (dispatch) => {
     dispatch(setLoading(false));
   } catch (error) {
     console.error(error);
+    dispatch(setLoading(false));
+    dispatch(setLoginError(true))
   }
 };

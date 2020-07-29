@@ -1,7 +1,8 @@
 const initialState = {
     posts: [],
     post: null,
-    isLoading: false
+    isLoading: false,
+    loginError: false
 }
 
 const posts = (state = initialState, action) => {
@@ -15,6 +16,11 @@ const posts = (state = initialState, action) => {
         case "SET_LOADING": {
             return {...state, isLoading: action.payload.loading}
         }
+
+        case "SET_LOGIN_ERROR": {
+            return {...state, loginError: action.payload.error}
+        }
+
         default:
             return state
     }

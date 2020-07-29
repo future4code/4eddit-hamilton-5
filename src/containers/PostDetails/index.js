@@ -36,11 +36,11 @@ class PostDetails extends Component {
     const token = localStorage.getItem("token");
     const postId = this.props.match.params.id;
 
-    if (token === null) {
+    if (!token) {
       this.props.goToLoginPage();
     }
 
-    if (this.props.getPostDetails && postId && this.props.post === null) {
+    if (this.props.getPostDetails && postId && !this.props.post) {
       this.props.getPostDetails(postId);
     }
   }
@@ -116,7 +116,7 @@ class PostDetails extends Component {
       <>
         <Header />
         <MainWrapper>
-          {this.props.post === null ? (
+          {!this.props.post ? (
             <CircularProgress />
           ) : (
             <WrapperPost>
